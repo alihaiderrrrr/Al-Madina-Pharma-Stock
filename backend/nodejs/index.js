@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+const fileUpload = require('express-file-upload');
+app.use(fileUpload());
 
 const {PORT} = require("./details/details.js")
 const userRouter = require('./services/apis.js');
