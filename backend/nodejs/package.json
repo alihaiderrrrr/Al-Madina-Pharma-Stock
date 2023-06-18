@@ -1,11 +1,16 @@
 {
   "dependencies": {
     "auth-crud": "^1.0.1",
+    "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-fileupload": "^1.4.0",
+    "generate-password": "^1.7.0",
     "mongoose": "^7.3.0",
     "node": "^20.2.0",
+    "nodemailer": "^6.9.3",
+    "randomstring": "^1.3.0",
     "urlencoded-body-parser": "^3.0.0"
   }
 }
