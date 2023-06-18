@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'Dashboard.dart';
 import 'components/my_button.dart';
 import 'components/my_textfield.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+
 import 'components/square_title.dart';
 import 'login.dart';
 import 'package:http/http.dart' as http;
+import 'Global/global.dart';
+
 import 'Global/global.dart';
 
 class SignUp extends StatelessWidget {
@@ -50,36 +54,86 @@ class SignUp extends StatelessWidget {
 
     // Create the request body
 
-    Map<String, String> body = {'email': email};
+    if (firstname != null &&
+            lastname != null &&
+            phone.length > 0 &&
+            email.contains('@') ||
+        email.contains('.') ||
+        email.length > 0) {
+      Map<String, String> body = {'email': email};
 
-    // Send the POST request
+      // Send the POST request
 
-    http.Response response = await http.post(Uri.parse(signupUrl), body: body);
+      http.Response response =
+          await http.post(Uri.parse(signupUrl), body: body);
 
-    // String verificationCode = response.body['verification'];
-    // Handle the response
+      // String verificationCode = response.body['verification'];
+      // Handle the response
 
-    if (response.statusCode == 200) {
-      print('working and email is sent from Flutter');
+      if (response.statusCode == 200) {
+        final snackBar = SnackBar(
+          /// need to set following properties for best effect of awesome_snackbar_content
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: 'Email Sent',
+            message: 'Email is Sent On your Via Email',
+            contentType: ContentType.failure,
+          ),
+        );
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Verfication(),
-          settings: RouteSettings(arguments: myValues),
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Verfication(),
+            settings: RouteSettings(arguments: myValues),
+          ),
+        );
+      } else {
+        final snackBar = SnackBar(
+          /// need to set following properties for best effect of awesome_snackbar_content
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: 'Error',
+            message: 'plzz Fill & All the Correct Information ',
+            contentType: ContentType.failure,
+          ),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      }
+    } else {
+      final snackBar = SnackBar(
+        /// need to set following properties for best effect of awesome_snackbar_content
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Error',
+          message: 'plzz Fill All Feilds ',
+          contentType: ContentType.failure,
         ),
       );
-    } else if (response.statusCode == 400) {
-      print('error 400');
-    } else {
-      print('error failed ');
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.grey[300],
       body: SingleChildScrollView(
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: SafeArea(
@@ -87,16 +141,15 @@ class SignUp extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // logo
-                // const Icon(
-                //   Icons.lock,
-                //   size: 100,
-                // ),
-                Image.asset('assets/images/log.png'),
+                const Icon(
+                  Icons.lock,
+                  size: 100,
+                ),
 
-                const SizedBox(height: 5),
+                const SizedBox(height: 50),
 
                 // welcome back, you've been missed!
                 Text(
@@ -171,7 +224,7 @@ class SignUp extends StatelessWidget {
                     padding: const EdgeInsets.all(25),
                     margin: const EdgeInsets.symmetric(horizontal: 25),
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 0, 174, 255),
+                      color: Color.fromARGB(255, 46, 16, 116),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Center(
@@ -326,26 +379,63 @@ class _SetPasswordState extends State<SetPassword> {
       'lastname': lastname,
       'phone': phone,
       'email': email,
-      'password':password
+      'password': password
     };
     print('$body  body ???????????');
     // Send the POST request
 
-    http.Response response = await http.post(Uri.parse(Node_url), body: body);
+    if (password == Confirmpassword) {
+      http.Response response = await http.post(Uri.parse(Node_url), body: body);
 
-    if (response.statusCode == 200) {
-      print('Register Successfully');
+      if (response.statusCode == 200) {
+       
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginPage(),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginPage(),
+          ),
+        );
+
+ final snackBar = SnackBar(
+        /// need to set following properties for best effect of awesome_snackbar_content
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Register',
+          message: 'Account Created Successful',
+          contentType: ContentType.failure,
         ),
       );
-    } else if (response.statusCode == 400) {
-      print('error 400');
-    } else {
-      print('error failed ');
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+
+
+      } else if (response.statusCode == 400) {
+        print('error 400');
+      } else {
+        print('error failed ');
+      }
+    }else{
+
+       final snackBar = SnackBar(
+        /// need to set following properties for best effect of awesome_snackbar_content
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Error',
+          message: 'password not Same ',
+          contentType: ContentType.failure,
+        ),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
     }
   }
 
